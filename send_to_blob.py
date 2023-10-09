@@ -7,8 +7,8 @@ ACCOUNT_NAME = "omnistoragehierar"
 ACCOUNT_KEY = "oCNEzgAm6qTdCqtYVfCxMbIDBTBwVay1O0gkqJbDY0YALjtWJHgWiouUueHyHH/I70C4LmJJAWbJ+AStcWhmfg=="
 
 fs_container = "escalas-mma"
-directory_file = "Entrada/Processar/CSV"
-file_name_to_upload = "Sigmec.csv"
+directory_file = "Entrada/Processar/Excel"
+file_name_to_upload = ""
 local_file_name = os.path.join(os.path.abspath("./"), file_name_to_upload)
 
 CONN_STR = (f"DefaultEndpointsProtocol=https;AccountName={ACCOUNT_NAME};AccountKey={ACCOUNT_KEY};EndpointSuffix=core.windows.net")
@@ -66,7 +66,7 @@ def upload_variable_to_blob(connection_string, container_name, blob_name, data):
 
 def export_dataframe_to_blob(df, container_name, blob_name):
     bytes_io = io.BytesIO()
-    df.to_csv(bytes_io, index=False)
+    df.to_excel(bytes_io, index=False)
     exported_data = bytes_io.getvalue()
     exported_data_io = io.BytesIO(exported_data)
     upload_variable_to_blob(CONN_STR, container_name, blob_name, exported_data_io.getvalue())

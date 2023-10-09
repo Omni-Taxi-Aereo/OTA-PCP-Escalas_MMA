@@ -18,6 +18,18 @@ token_content = requests.post(
     json = CONTENT,
     headers=TOKEN_HEADERS
 )
+#dic para padronizar nome de bases com o Sigmec, formato: {'Nome no Sigmec' : 'Nome no Sigtrip'}
+bases = {'Porto Urucu': 'Porto Urucu', 'Tomé': 'Tomé', 'Campos dos Goytacazes': 'Campos', 'Maricá': 'Maricá', 'Vitória': 'Vitória',
+ 'Jacarepaguá': 'Jacarepaguá', 'Cabo Frio': 'Cabo Frio', 'Aeroporto Internacional Eugene F. Correia': 'Guyana', 'Macaé': 'Macaé',
+  'Galeão': 'Galeao', 'São Paulo': 'São Paulo', 'Navegantes': 'Navegantes', 'Cubatão': 'Cubatão'}
+
+# Padroniza as o nome das plataformas, usando como base dados do Sigmec
+def Padroniza_bases(valor):
+    if valor in bases:
+        return bases[valor]
+    else:
+        return valor
+
 
 def Extrai_Sigtrip():
     print('Extraindo dados do Sigtrip...')
@@ -31,4 +43,5 @@ def Extrai_Sigtrip():
     dados = requests.get(url = ESCALA_URL, headers = headers)
     dados = json.loads(dados.content.decode('utf-8'))
     df_sigtrip = pd.DataFrame(dados['data']['index_data'])
+    df_sigtrip['base'] = df_sigtrip['base'].apply(Padroniza_bases)
     return df_sigtrip
