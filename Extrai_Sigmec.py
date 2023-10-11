@@ -39,7 +39,7 @@ jpa2 = [ 'Hangar - Heavy Mnt (D)', 'Oficina - Laboratório de Aviônica (D)', 'O
 aeronaves = {'AW139': 'AW-139', 'EC155 B1': 'H-155', 'EC225 LP': 'EC-225','S76-A': 'S76', 'S76-C+': 'S76', 'S76-C++': 'S76'}
 
 # Colunas que são excluídas
-colunas_para_excluir = ['id', 'staff_id', 'role_id', 'inscription', 'canac', 'date_of_birth', 'cel', 'gmp',
+colunas_para_excluir = ['staff_id', 'role_id', 'inscription', 'canac', 'date_of_birth', 'cel', 'gmp',
                         'avi', 'aircraft_models', 'aircraft_model_subtypes', 'dates', 'city']
 
 #Define mes e ano seguinte e do mês seguinte da forma que fica escrito no Sigmec
@@ -96,14 +96,14 @@ def Cria_Lista_De_Pesquisa():
     listas.append(lista_mes_seguinte)
     return listas
 
-# Padroniza a troca de saída (TS) e de entrada (TE)
+# Padroniza a troca de saída (TS) e de entrada (X)
 def substituir_T(row):
     for i, valor in enumerate(row):
         if valor == "T":
             if i <= len(row) -1 and row[i - 1] == "X":
                 row[i] = "TS"
             elif i <= len(row) -1  and row[i - 1] == "":
-                row[i] = "TE"
+                row[i] = "X"
     return row
 
 def Arruma_bases(valor):
@@ -140,10 +140,8 @@ def Define_Quinzena(valor):
         return  'Urucu 2'
     elif valor in quinzena_com:
         return  'Comercial'
-    elif valor == '':
+    elif valor == None:
         return 'Férias'
-    else:
-        return valor
 
 def Extrai_Mes_atual():
     lista_mes_atual = Cria_Lista_De_Pesquisa()[0]
@@ -180,7 +178,7 @@ def Extrai_Mes_atual():
     Padroniza_aeronaves(df_geral_mes_atual)
     #Exclui colunas desnecessárias
     df_geral_mes_atual.drop(columns=colunas_para_excluir, inplace=True)
-    #Identifica T de entrada, muda para TE e T de saída para TS
+    #Identifica T de entrada, muda para X e T de saída para TS
     df_geral_mes_atual = df_geral_mes_atual.apply(substituir_T, axis=1)
     #Retira espaços em branco no inicio de cada base
     df_geral_mes_atual ['Plataforma'] = df_geral_mes_atual['Plataforma'].apply(Arruma_bases)
@@ -199,7 +197,7 @@ def Extrai_Mes_seguinte():
         df_mes_seguinte = pd.DataFrame(dados_mes_seguinte['data']['schedule_grade_group_staffs'])
         
         # Identifica qual é a base, cria uma coluna com o nome da base em cada linha
-        base = lista_mes_seguinte[4]['label'].split('/')[1]
+        base = lista_mes_seguinte[k]['label'].split('/')[1]
         base = base.split('-')[1]
         df_mes_seguinte['Plataforma'] = base
 
@@ -216,7 +214,7 @@ def Extrai_Mes_seguinte():
         df_geral_mes_seguinte = pd.concat([df_geral_mes_seguinte,df_mes_seguinte], ignore_index=True)
     print('Manipulando dados da planilha do mês seguinte...')
     try:
-        #Identifica T de entrada, muda para TE e T de saída para TS
+        #Identifica T de entrada, muda para X e T de saída para TS
         df_geral_mes_seguinte = df_geral_mes_seguinte.apply(substituir_T, axis=1)
         #Padroniza as quinzenas
         df_geral_mes_seguinte['period'] = df_geral_mes_seguinte['period'].apply(Define_Quinzena)

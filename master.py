@@ -17,20 +17,48 @@ sig_trip = Extrai_Sigtrip()
 # send_to_blob.export_dataframe_to_blob(mes_seguinte, 'escalas-mma', 'Entrada/Excel/Sigmec_mes_seguinte.xlsx')
 # send_to_blob.export_dataframe_to_blob(sig_trip, 'escalas-mma', 'Entrada/Excel/Sigtrip.xlsx')
 
+
+# -------------------------------------------------------------------------------------------------------------
+# Upa dados do Sigtrip
 sig_trip_cabecalho = [sig_trip.columns.tolist()]
 sig_trip_valores = sig_trip.values.tolist()
 send_to_googlesheet.EscreveValores('Sigtrip!A2', sig_trip_cabecalho)
 send_to_googlesheet.EscreveValores('Sigtrip!A3', sig_trip_valores)
 
-mes_atual_cabecalho = [mes_atual.columns.tolist()]
+# -------------------------------------------------------------------------------------------------------------
+# Upa mes atual
+mes_atual_cabecalho = mes_atual.columns.tolist()
+
+cabecalho_corrigidos_atual = []
+# retira mês e ano do cabeçalho, para que o BI não crash quando mudar o mês
+for i in range(len(mes_atual_cabecalho)):
+    if mes_atual_cabecalho[i-1] == 'PT6B-37A': # renomeia a coluna referente ao mês passado
+        cabecalho_corrigidos_atual.append('mês ant.')
+    else:
+        mes_atual_cabecalho[i] = mes_atual_cabecalho[i].split('/')[0]
+        cabecalho_corrigidos_atual.append (mes_atual_cabecalho[i])
+
 mes_atual_valores = mes_atual.values.tolist()
-send_to_googlesheet.EscreveValores('Sigmec_mes_atual!A2', mes_atual_cabecalho)
+# Envia para o google sheet
+send_to_googlesheet.EscreveValores('Sigmec_mes_atual!A2', [cabecalho_corrigidos_atual])
 send_to_googlesheet.EscreveValores('Sigmec_mes_atual!A3', mes_atual_valores)
 
+# -------------------------------------------------------------------------------------------------------------
+#Upa mes seguinte
+mes_seguinte_cabecalho = mes_seguinte.columns.tolist()
 
-mes_seguinte_cabecalho = [mes_seguinte.columns.tolist()]
+cabecalho_corrigidos_seguinte = []
+# retira mês e ano do cabeçalho, para que o BI não crash quando mudar o mês
+for i in range(len(mes_seguinte_cabecalho)):
+    if mes_seguinte_cabecalho[i-1] == 'PT6B-37A': # renomeia a coluna referente ao mês passado
+        cabecalho_corrigidos_seguinte.append('mês ant.')
+    else:
+        mes_seguinte_cabecalho[i] = mes_seguinte_cabecalho[i].split('/')[0]
+        cabecalho_corrigidos_seguinte.append (mes_seguinte_cabecalho[i])
+
 mes_seguinte_valores = mes_seguinte.values.tolist()
-send_to_googlesheet.EscreveValores('Sigmec_mes_seguinte!A2', mes_seguinte_cabecalho)
+# Envia para o google sheet
+send_to_googlesheet.EscreveValores('Sigmec_mes_seguinte!A2', [cabecalho_corrigidos_seguinte])
 send_to_googlesheet.EscreveValores('Sigmec_mes_atual!A3', mes_seguinte_valores)
 
 
