@@ -63,3 +63,5 @@ send_to_googlesheet.EscreveValores('Sigmec_mes_atual!A3', mes_seguinte_valores)
 
 
 print('Execução finalizada')
+
+#

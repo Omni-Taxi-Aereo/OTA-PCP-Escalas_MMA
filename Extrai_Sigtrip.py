@@ -45,3 +45,4 @@ def Extrai_Sigtrip():
     df_sigtrip = pd.DataFrame(dados['data']['index_data'])
     df_sigtrip['base'] = df_sigtrip['base'].apply(Padroniza_bases)
     return df_sigtrip
+#

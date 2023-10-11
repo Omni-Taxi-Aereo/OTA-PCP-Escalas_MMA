@@ -60,3 +60,4 @@ def EscreveValores(intervalo,valores):
 
 # data = data.values.tolist()
 # EscreveValores('Sigtrip!A2', data)
+#
