@@ -11,11 +11,14 @@ data_formatada = agora.strftime("%d/%m/%Y")
 
 TOKEN_URL = 'https://api.sigtrip.com.br/api/get/token'
 ESCALA_URL = 'https://api.sigtrip.com.br/api/escalas/programacao/' + str(data_formatada)
+USERNAME = os.environ.get('SIG_USER')
+PASSWORD = os.environ.get('SIG_PASSWORD')
+
 CONTENT = {
-    "username": 'srv_api_indicadores@omnibrasil.com.br', 
-    "password": 'Omni@2022!', 
-    "system": "sigtrip"
-    }
+    "username": USERNAME, 
+    "password": PASSWORD, 
+    "system": "sigmec"
+}
 TOKEN_HEADERS = {"Content-Type": "application/json"}
 
 token_content = requests.post(
