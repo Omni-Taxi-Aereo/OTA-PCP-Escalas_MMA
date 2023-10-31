@@ -10,11 +10,14 @@ import Send_email
 TOKEN_URL = 'https://api.sigmec.com.br/api/get/token'
 ESCALA_URL = 'https://api.sigmec.com.br/api/escala/grade/vencimentos'
 ESCALA_URL_PESQUISA = 'https://api.sigmec.com.br/api/escala/grade/vencimentos/pesquisa'
+USERNAME = os.environ.get('SIG_USER')
+PASSWORD = os.environ.get('SIG_PASSWORD')
+
 CONTENT = {
-    "username": 'srv_api_indicadores@omnibrasil.com.br', 
-    "password": 'Omni@2022!', 
+    "username": USERNAME, 
+    "password": PASSWORD, 
     "system": "sigmec"
-    }
+}
 TOKEN_HEADERS = {"Content-Type": "application/json"}
 
 # quinzenas como são escritas no Sigmec, essas listas são utilizadas para padronização desses valores
