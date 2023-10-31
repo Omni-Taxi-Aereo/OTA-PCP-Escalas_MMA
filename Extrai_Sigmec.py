@@ -13,6 +13,9 @@ ESCALA_URL_PESQUISA = 'https://api.sigmec.com.br/api/escala/grade/vencimentos/pe
 USERNAME = os.environ.get('SIG_USER')
 PASSWORD = os.environ.get('SIG_PASSWORD')
 
+USERNAME = os.environ.get('SIG_USER')
+PASSWORD = os.environ.get('SIG_PASSWORD')
+
 CONTENT = {
     "username": USERNAME, 
     "password": PASSWORD, 
