@@ -5,6 +5,7 @@ import pprint
 import pandas as pd
 import Send_email
 import datetime
+import os
 
 agora = datetime.datetime.now()
 data_formatada = agora.strftime("%d/%m/%Y")
