@@ -51,6 +51,8 @@ send_to_googlesheet.EscreveValores('Data_atualização!A1', [[data_formatada]])
 #Upa mes seguinte
 
 mes_seguinte_cabecalho = mes_seguinte.columns.tolist()
+if len(mes_seguinte_cabecalho) == 0:
+    mes_seguinte_cabecalho = mes_atual_cabecalho
 mes_seguinte_valores = mes_seguinte.values.tolist()
 
 # Envia para o google sheet
