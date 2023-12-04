@@ -1,10 +1,11 @@
 import Extrai_Sigmec
 from Extrai_Sigtrip import Extrai_Sigtrip
-import send_to_blob
+#import send_to_blob
 import send_to_googlesheet
 import datetime
 import Send_email
 
+print('Iniciando Extração de dados...')
 
 mes_atual = Extrai_Sigmec.Extrai_Mes_atual()
 mes_seguinte = Extrai_Sigmec.Extrai_Mes_seguinte()
@@ -25,6 +26,8 @@ data_formatada = agora.strftime("%d/%m/%Y %H:%M")
 
 # -------------------------------------------------------------------------------------------------------------
 # Upa dados do Sigtrip
+
+print('Carregando dados na google sheet...')
 
 sig_trip_cabecalho = [sig_trip.columns.tolist()]
 sig_trip_valores = sig_trip.values.tolist()
@@ -80,6 +83,6 @@ Contato de suporte: alan.chagas@omnibrasil.com.br \n \n \
 Att, \n \
 Equipe TI Digital'
 
-destinatarios = ['alan.chagas@omnibrasil.com.br','daniel.fumian@omnibrasil.com.br', 'karen.ribeiro@omnibrasil.com.br' ]
+destinatarios = ['alan.chagas@omnibrasil.com.br', 'karen.ribeiro@omnibrasil.com.br' ]
 
 Send_email.send_email_assunto_destinatarios('Dados de escala MMA atualizados com sucesso', destinatarios ,assunto_PCP)

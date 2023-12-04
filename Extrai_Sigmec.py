@@ -1,4 +1,4 @@
-import send_to_blob
+# import send_to_blob
 import requests, ast
 from datetime import datetime, timedelta
 import json
@@ -14,14 +14,21 @@ ESCALA_URL_PESQUISA = 'https://api.sigmec.com.br/api/escala/grade/vencimentos/pe
 USERNAME = os.environ.get('SIG_USER')
 PASSWORD = os.environ.get('SIG_PASSWORD')
 
-USERNAME = os.environ.get('SIG_USER')
-PASSWORD = os.environ.get('SIG_PASSWORD')
+# USERNAME = os.environ.get('SIG_USER')
+# PASSWORD = os.environ.get('SIG_PASSWORD')
+
+# CONTENT = {
+#     "username": USERNAME, 
+#     "password": PASSWORD, 
+#     "system": "sigmec"
+# }
 
 CONTENT = {
-    "username": USERNAME, 
-    "password": PASSWORD, 
+    "username": 'srv_api_indicadores@omnibrasil.com.br', 
+    "password": 'Omni@2022!', 
     "system": "sigmec"
-}
+    }
+
 TOKEN_HEADERS = {"Content-Type": "application/json"}
 
 # quinzenas como são escritas no Sigmec, essas listas são utilizadas para padronização desses valores
