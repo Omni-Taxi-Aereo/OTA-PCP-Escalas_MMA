@@ -80,6 +80,6 @@ Contato de suporte: alan.chagas@omnibrasil.com.br \n \n \
 Att, \n \
 Equipe TI Digital'
 
-destinatarios = ['alan.chagas@omnibrasil.com.br','daniel.fumian@omnibrasil.com.br', 'karen.ribeiro@omnibrasil.com.br' ]
+destinatarios = ['alan.chagas@omnibrasil.com.br' , 'karen.ribeiro@omnibrasil.com.br' ]
 
 Send_email.send_email_assunto_destinatarios('Dados de escala MMA atualizados com sucesso', destinatarios ,assunto_PCP)
