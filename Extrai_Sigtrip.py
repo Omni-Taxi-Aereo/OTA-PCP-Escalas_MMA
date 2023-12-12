@@ -38,7 +38,7 @@ token_content = requests.post(
 #dic para padronizar nome de bases com o Sigmec, formato: {'Nome no Sigmec' : 'Nome no Sigtrip'}
 bases = {'Porto Urucu': 'Porto Urucu', 'Tomé': 'Tomé', 'Campos dos Goytacazes': 'Campos', 'Maricá': 'Maricá', 'Vitória': 'Vitória',
  'Jacarepaguá': 'Jacarepaguá', 'Cabo Frio': 'Cabo Frio', 'Aeroporto Internacional Eugene F. Correia': 'Guyana', 'Macaé': 'Macaé',
-  'Galeão': 'Galeao', 'São Paulo': 'São Paulo', 'Navegantes': 'Navegantes', 'Cubatão': 'Cubatão'}
+  'Galeão': 'Galeao', 'São Paulo': 'São Paulo', 'Navegantes': 'Navegantes', 'Cubatão': 'Cubatão','Aracaju':'Aracaju', 'Em trânsito':'Em trânsito'}
 
 # Padroniza as o nome das plataformas, usando como base dados do Sigmec
 def Padroniza_bases(valor):
