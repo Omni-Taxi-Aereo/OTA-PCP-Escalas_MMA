@@ -38,14 +38,14 @@ token_content = requests.post(
 #dic para padronizar nome de bases com o Sigmec, formato: {'Nome no Sigmec' : 'Nome no Sigtrip'}
 bases = {'Porto Urucu': 'Porto Urucu', 'Tomé': 'Tomé', 'Campos dos Goytacazes': 'Campos', 'Maricá': 'Maricá', 'Vitória': 'Vitória',
  'Jacarepaguá': 'Jacarepaguá', 'Cabo Frio': 'Cabo Frio', 'Aeroporto Internacional Eugene F. Correia': 'Guyana', 'Macaé': 'Macaé',
-  'Galeão': 'Galeao', 'São Paulo': 'São Paulo', 'Navegantes': 'Navegantes', 'Cubatão': 'Cubatão','Aracaju':'Aracaju', 'Em trânsito':'Em trânsito'}
+  'Galeão': 'Galeao', 'São Paulo': 'São Paulo', 'Navegantes': 'Navegantes', 'Cubatão': 'Cubatão','Aracaju':'Aracaju', 'Em trânsito':'Em trânsito', 'Fortaleza':'Fortaleza'}
 
 # Padroniza as o nome das plataformas, usando como base dados do Sigmec
 def Padroniza_bases(valor):
     if valor in bases:
         return bases[valor]
     else:
-        corpo = 'Parece que algum nome de aeronave no sigtrip foi modificado ou adicionado e não está na lista  de aeronaves do script Extrai_Sigtrip' + str(valor)
+        corpo = 'Parece que algum nome de base no sigtrip foi modificado ou adicionado e não está na lista  de bases do script Extrai_Sigtrip' + str(valor)
         Send_email.send_email(corpo)
         print(corpo)
         raise IndexError
