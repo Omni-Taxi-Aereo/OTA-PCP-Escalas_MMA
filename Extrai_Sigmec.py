@@ -36,7 +36,7 @@ quinzenas1 = ['Inspectors and leaders - 1st fortnight', 'Inspetores e Líderes -
  'Mechanics - 1st fortnight']
 quinzenas2 =['Inspectors and leaders - 2st fortnight' , 'Inspetores e Líderes - 2ª Quinzena', 'Mecânicos - 2ª Quinzena',
              'Mechanics - 2st fortnight']
-quinzenas_urucu = ['Equipe - 1ª Turma', 'Equipe - 2ª Turma']
+quinzenas_urucu = ['Equipe - 1ª Turma', 'Equipe - 2ª Turma', '1ª Turma', '2ª Turma', '2ª Turma']
 quinzena_com = ['Comercial']
 
 #Turnos como são escritos no Sigmec, essas listas são utilizadas para padronização desses valores
