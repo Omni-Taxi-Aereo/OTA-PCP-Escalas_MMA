@@ -1,10 +1,11 @@
 # import send_to_blob
 import requests, ast
-from datetime import datetime, timedelta
+from datetime import datetime
 import json
 import pandas as pd
 import Send_email
 import os
+from send_to_googlesheet import LerValores
 
 
 
@@ -14,53 +15,199 @@ ESCALA_URL_PESQUISA = 'https://api.sigmec.com.br/api/escala/grade/vencimentos/pe
 USERNAME = os.environ.get('SIG_USER')
 PASSWORD = os.environ.get('SIG_PASSWORD')
 
-# USERNAME = os.environ.get('SIG_USER')
-# PASSWORD = os.environ.get('SIG_PASSWORD')
-
-# CONTENT = {
-#     "username": USERNAME, 
-#     "password": PASSWORD, 
-#     "system": "sigmec"
-# }
+USERNAME = os.environ.get('SIG_USER')
+PASSWORD = os.environ.get('SIG_PASSWORD')
 
 CONTENT = {
-    "username": 'srv_api_indicadores@omnibrasil.com.br', 
-    "password": 'Omni@2022!', 
+    "username": USERNAME, 
+    "password": PASSWORD, 
     "system": "sigmec"
-    }
+}
+
 
 TOKEN_HEADERS = {"Content-Type": "application/json"}
 
 # quinzenas como são escritas no Sigmec, essas listas são utilizadas para padronização desses valores
-quinzenas1 = ['Inspectors and leaders - 1st fortnight', 'Inspetores e Líderes - 1ª Quinzena', 'Mecânicos - 1ª Quinzena', 
- 'Mechanics - 1st fortnight']
-quinzenas2 =['Inspectors and leaders - 2st fortnight' , 'Inspetores e Líderes - 2ª Quinzena', 'Mecânicos - 2ª Quinzena',
-             'Mechanics - 2st fortnight']
-quinzenas_urucu = ['Equipe - 1ª Turma', 'Equipe - 2ª Turma', '1ª Turma', '2ª Turma', '2ª Turma']
-quinzena_com = ['Comercial']
+
+L_quinzena_1 = LerValores(('Bases!F1:F100'))
+quinzenas1 = []
+
+for i in range(len(L_quinzena_1)):
+    quinzenas1.append(L_quinzena_1[i][0])
+
+print ('\n Lista de 1ª Quinzenas: ', quinzenas1)
+
+#------------------------------------------------------
+
+L_quinzena_2 = LerValores(('Bases!G1:G100'))
+quinzenas2 = []
+
+for i in range(len(L_quinzena_2)):
+    quinzenas2.append(L_quinzena_2[i][0])
+
+print ('\nLista de 2ª Quinzenas: ', quinzenas2)
+
+#------------------------------------------------------
+
+L_quinzena_urucu_1 = LerValores(('Bases!H1:H100'))
+quinzenas_urucu_1 = []
+
+for i in range(len(L_quinzena_urucu_1)):
+    quinzenas_urucu_1.append(L_quinzena_urucu_1[i][0])
+
+print ('\nLista de Quinzenas de Urucu: ', quinzenas_urucu_1)
+
+#------------------------------------------------------
+
+L_quinzena_urucu_2 = LerValores(('Bases!I1:I100'))
+quinzenas_urucu_2 = []
+
+for i in range(len(L_quinzena_urucu_2)):
+    quinzenas_urucu_2.append(L_quinzena_urucu_2[i][0])
+
+print ('\nLista de Quinzenas de Urucu: ', quinzenas_urucu_2)
+
+
+#------------------------------------------------------
+    
+L_quinzena_com = LerValores(('Bases!J1:J100'))
+quinzena_com = []
+
+for i in range(len(L_quinzena_com)):
+    quinzena_com.append(L_quinzena_com[i][0])
+
+print ('\nLista de Quinzenas de Urucu: ', quinzena_com)
+
+#------------------------------------------------------
+#Turnos como são escritos no Sigmec, essas listas são utilizadas para padronização desses valores
+
+L_diurno = LerValores(('Bases!K1:K100'))
+diurno = []
+
+for i in range(len(L_diurno)):
+    diurno.append(L_diurno[i][0])
+
+print ('\nLista de grupos de diurno: ', diurno)
+
+#------------------------------------------------------
+    
+L_noturno = LerValores(('Bases!L1:L100'))
+noturno = []
+
+for i in range(len(L_noturno)):
+    noturno.append(L_noturno[i][0])
+
+print ('\nLista de grupos de noturno: ', noturno)
+
+#------------------------------------------------------
+# Padroniza nomes de aeronaves no formato: {'Nome no Sigmec': 'Nome no Sigtrip'}
+
+C_aeronaves = LerValores(('Bases!M1:M100'))
+V_aeronaves = LerValores(('Bases!N1:N100'))
+aeronaves = {}
+
+for i in range(len(C_aeronaves)):
+    aeronaves[C_aeronaves[i][0]] = V_aeronaves[i][0]
+
+print ('\nDicionário de aeronaves no formato {segmec:sigtrip}: ', aeronaves)
+
+#------------------------------------------------------
+
+
+# quinzenas1 = ['Inspectors and leaders - 1st fortnight',
+#               'Inspetores e Líderes - 1ª Quinzena',
+#               'Mecânicos - 1ª Quinzena',
+#               'Mechanics - 1st fortnight'
+#               ]
+# quinzenas2 =['Inspectors and leaders - 2st fortnight' ,
+#              'Inspetores e Líderes - 2ª Quinzena',
+#              'Mecânicos - 2ª Quinzena',
+#              'Mechanics - 2st fortnight'
+#              ]
+# quinzenas_urucu = ['Equipe - 1ª Turma',
+#                    'Equipe - 2ª Turma',
+#                    '1ª Turma',
+#                    '2ª Turma',
+#                    '2ª Turma'
+#                    ]
+# quinzena_com = ['Comercial']
 
 #Turnos como são escritos no Sigmec, essas listas são utilizadas para padronização desses valores
-diurno = [ 'Grupo1', 'Grupo2', 'Grupo3 ADM', 'Grupo Especial 1', 'Grupo1 ADM', 'Grupo Especial 2',
-          'Grupo Especial 3', 'Grupo Especial 4', 'Grupo2 ADM', 'Group1', 'Group2',
-          "Hangar - Heavy Mnt (D)", "Oficina - Laboratório de Aviônica (D)", "Oficina de Estruturas Compostas", "Grupo1 ADM",
-          "Grupo2 ADM", "Oficina de Salvatagem (D)", "Oficina de Componentes", "Manutenção de Hangar - Pintura (D)",
-          "Oficina de Capotaria - Comercial Diurno", "Oficina de motores", "Oficina de Exhaust", "Oficina de Exhaust - Componentes",
-          "Oficina Manutenção R22 (D)","Oficina de Salvatagem - Comercial Diurno", "Oficina de Solda / Rodas",'Oficina de Solda / Rodas (C)',
-          "Oficina de Blades", "Oficina de Solda / Rodas(C)", "Oficina de Pintura (C)", "Oficina de NDT", "Mnt Hangar e Pista R22",
-          "Oficina de Fuel Nozzles", "Oficina de Hidrostática", "Grupo Especial 1", "Grupo Especial 2", "Oficina de Fuel Nozzles",
-          "Oficina de Pintura (D)", "Oficina de Salvatagem", "Oficina Manutenção R22 (C) Diurno", "Oficina de NDT (D)"]
+# diurno = [ 'Grupo1',
+#           'Grupo2',
+#           'Grupo3 ADM',
+#           'Grupo Especial 1',
+#           'Grupo1 ADM',
+#           'Grupo Especial 2',
+#           'Grupo Especial 3',
+#           'Grupo Especial 4',
+#           'Grupo2 ADM',
+#           'Group1',
+#           'Group2',
+#           "Hangar - Heavy Mnt (D)",
+#           "Oficina - Laboratório de Aviônica (D)",
+#           "Oficina de Estruturas Compostas",
+#           "Grupo1 ADM",
+#           "Grupo2 ADM",
+#           "Oficina de Salvatagem (D)",
+#           "Oficina de Componentes",
+#           "Manutenção de Hangar - Pintura (D)",
+#           "Oficina de Capotaria - Comercial Diurno",
+#           "Oficina de motores",
+#           "Oficina de Exhaust",
+#           "Oficina de Exhaust - Componentes",
+#           "Oficina Manutenção R22 (D)",
+#           "Oficina de Salvatagem - Comercial Diurno",
+#           "Oficina de Solda / Rodas",
+#           'Oficina de Solda / Rodas (C)',
+#           "Oficina de Blades", "Oficina de Solda / Rodas(C)",
+#           "Oficina de Pintura (C)",
+#           "Oficina de NDT",
+#           "Mnt Hangar e Pista R22",
+#           "Oficina de Fuel Nozzles",
+#           "Oficina de Hidrostática",
+#           "Grupo Especial 1",
+#           "Grupo Especial 2",
+#           "Oficina de Fuel Nozzles",
+#           "Oficina de Pintura (D)",
+#           "Oficina de Salvatagem",
+#           "Oficina Manutenção R22 (C) Diurno",
+#           "Oficina de NDT (D)"
+#           ]
 
-noturno = ['Grupo3', 'Grupo4', 'Group3', 'Group4',
-           "Oficina Manutenção R22 (C) Noturno", "Oficina - Laboratório de Aviônica (N)", "Hangar - Heavy Mnt (N)",
-           "Oficina de Salvatagem - Comercial Noturno", "Oficina de Pintura (N)"]
+# noturno = ['Grupo3',
+#            'Grupo4',
+#            'Group3',
+#            'Group4',
+#            "Oficina Manutenção R22 (C) Noturno",
+#            "Oficina - Laboratório de Aviônica (N)",
+#            "Hangar - Heavy Mnt (N)",
+#            "Oficina de Salvatagem - Comercial Noturno",
+#            "Oficina de Pintura (N)"
+#            ]
 
 
 # Padroniza nomes de aeronaves no formato: {'Nome no Sigmec': 'Nome no Sigtrip'}
-aeronaves = {'AW139': 'AW-139', 'EC155 B1': 'H-155', 'EC225 LP': 'EC-225','S76-A': 'S76', 'S76-C+': 'S76', 'S76-C++': 'S76', }
+# aeronaves = {'AW139': 'AW-139',
+#              'EC155 B1': 'H-155',
+#              'EC225 LP': 'EC-225',
+#              'S76-A': 'S76',
+#              'S76-C+': 'S76',
+#              'S76-C++': 'S76'
+#              }
 
 # Colunas que são excluídas
-colunas_para_excluir = ['staff_id', 'role_id', 'inscription', 'canac', 'date_of_birth', 'cel', 'gmp',
-                        'avi', 'aircraft_models', 'aircraft_model_subtypes', 'dates', 'city']
+colunas_para_excluir = ['staff_id', 'role_id',
+                        'inscription', 'canac',
+                        'date_of_birth',
+                        'cel',
+                        'gmp',
+                        'avi',
+                        'aircraft_models',
+                        'aircraft_model_subtypes',
+                        'dates',
+                        'city'
+                        ]
 
 #Define mes e ano seguinte e do mês seguinte da forma que fica escrito no Sigmec
 data_atual = datetime.now()
@@ -196,9 +343,9 @@ def Define_Quinzena(valor):
         return '1ª Quinzena'
     elif valor in quinzenas2:
         return  '2ª Quinzena'
-    elif valor == quinzenas_urucu[0]:
+    elif valor in quinzenas_urucu_1:
         return  'Urucu 1'
-    elif valor == quinzenas_urucu[1]:
+    elif valor in quinzenas_urucu_2:
         return  'Urucu 2'
     elif valor in quinzena_com:
         return  'Comercial'
@@ -258,7 +405,7 @@ def Extrai_Mes_atual():
         return df_geral_mes_atual
     except Exception as e:
         Send_email.send_email('Erro ao Extrair dados do mês atual do Sigmec')
-        print('Erro ao Extrair dados do mês atual do Sigmec')
+        print('Erro ao Extrair dados do mês atual do Sigmec\n Error: ',e)
         raise e
 
 
@@ -292,7 +439,7 @@ def Extrai_Mes_seguinte():
             #Junta a planilha parcial, com info da base, na planilha geral de todas as bases
             df_geral_mes_seguinte = pd.concat([df_geral_mes_seguinte,df_mes_seguinte], ignore_index=True)
     except Exception as e:
-        Send_email.send_email('Erro ao Extrair dados do mês atual do Sigmec')
+        Send_email.send_email('Erro ao Extrair dados do mês atual do Sigmec \n ERROR: ', e)
         print('Erro ao Extrair dados do mês seguinte do Sigmec')
         raise e
     print('Manipulando dados da planilha do mês seguinte...')
@@ -315,6 +462,7 @@ def Extrai_Mes_seguinte():
         df_geral_mes_seguinte.columns = Padroniza_mes_ant(df_geral_mes_seguinte.columns)
         #Adiciona o dia 31 com todas linhas em branco caso ele não exista no mês em quetão, pois o BI precisa de uma coluna chamada 31
         df_geral_mes_seguinte = Padroniza_dia_31(df_geral_mes_seguinte)
-    except KeyError:
+    except Exception as e:
+        Send_email.send_email('Erro ao Extrair dados do mês atual do Sigmec \n ERROR: ', e)
         print('Não existem dados de escala para o mês seguinte')
     return df_geral_mes_seguinte
