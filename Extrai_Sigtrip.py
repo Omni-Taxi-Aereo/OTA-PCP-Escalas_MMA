@@ -6,6 +6,7 @@ import pandas as pd
 import Send_email
 import datetime
 import os
+import sys
 
 agora = datetime.datetime.now()
 data_formatada = agora.strftime("%d/%m/%Y")
@@ -73,10 +74,10 @@ def Padroniza_bases(valor):
     if valor in bases:
         return bases[valor]
     else:
-        corpo = 'Parece que algum nome de base no sigtrip foi modificado ou adicionado e não está na lista  de bases do script Extrai_Sigtrip' + str(valor)
+        corpo = 'Parece que algum nome de base no sigtrip foi modificado ou adicionado e não está na lista  de bases do script Extrai_Sigtrip. Base com problema:  ' + str(valor)
         Send_email.send_email(corpo)
         print(corpo)
-        raise IndexError
+        sys.exit()
 
 def Padroniza_disponibilidade (elem):
     if elem == 1:
@@ -108,5 +109,5 @@ def Extrai_Sigtrip():
         return df_sigtrip
     except Exception as e:
         print('Erro ao Extrair dados do Sigtrip')
-        Send_email.send_email('Erro ao Extrair dados do Sigtrip \n ERROR: ', e )
-        raise e
+        Send_email.send_email(f'Erro ao Extrair dados do Sigtrip \n ERROR: {e}' )
+        sys.exit()

@@ -2,7 +2,7 @@ import yagmail
 
 login = 'ti.digital@omnibrasil.com.br'
 senha = 'ictrxbjknbignywd'
-destinatarios = ['alan.chagas@omnibrasil.com.br']#, 'nathan.carvalho@omnibrasil.com.br', 'eduardo.succo@omnibrasil.com.br', 'daniel.fumian@omnibrasil.com.br' ]
+destinatarios = ['alan.chagas@omnibrasil.com.br', 'nathan.carvalho@omnibrasil.com.br', 'daniel.fumian@omnibrasil.com.br' ]
 assunto = 'Script Escalas MMA ERRROR'
 
 def send_email(corpo, anexos=[], Cco=[]):
@@ -49,4 +49,3 @@ def send_email_assunto_destinatarios(assunto,destinatarios, corpo, anexos=[], Cc
         print(f'E-mail enviado para {", ".join(destinatarios)} com sucesso!')
     except Exception as e:
         raise e
-    

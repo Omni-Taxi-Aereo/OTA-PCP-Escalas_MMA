@@ -6,6 +6,7 @@ import pandas as pd
 import Send_email
 import os
 from send_to_googlesheet import LerValores
+import sys
 
 
 
@@ -106,10 +107,16 @@ C_aeronaves = LerValores(('Bases!M1:M100'))
 V_aeronaves = LerValores(('Bases!N1:N100'))
 aeronaves = {}
 
-for i in range(len(C_aeronaves)):
-    aeronaves[C_aeronaves[i][0]] = V_aeronaves[i][0]
+try:
+    for i in range(len(C_aeronaves)):
+        aeronaves[C_aeronaves[i][0]] = V_aeronaves[i][0]
 
-print ('\nDicionário de aeronaves no formato {segmec:sigtrip}: ', aeronaves)
+    print ('\nDicionário de aeronaves no formato {segmec:sigtrip}: ', aeronaves)
+except Exception as e:
+    corpo = 'A lista de aeronaves Sigtrip e Sigmec não estão com o mesmo tamanho'
+    print(corpo)
+    Send_email.send_email(corpo)
+    sys.exit()
 
 #------------------------------------------------------
 
@@ -237,7 +244,8 @@ def Gera_Token():
         return token
     except Exception as e:
         Send_email.send_email('Erro ao gerar Token API Sigmec')
-        raise e
+        print('Erro ao gerar Token API Sigmec')
+        sys.exit()
 
 token = Gera_Token()
 headers = {"Authorization": f"Bearer {token}"}
@@ -271,7 +279,8 @@ def Cria_Lista_De_Pesquisa():
         return listas
     except Exception as e:
         Send_email.send_email('Erro ao gerar Lista de Pesquisa Sigmec')
-        raise e
+        print('Erro ao gerar Lista de Pesquisa Sigmec')
+        sys.exit()
 # Padroniza a troca de saída (TS) e de entrada (X)
 def substituir_T(row):
     try:
@@ -286,6 +295,8 @@ def substituir_T(row):
         return row
     except Exception as e:
         Send_email.send_email('Erro ao substituir T nos dados do Sigmec')
+        print('Erro ao substituir T nos dados do Sigmec')
+        sys.exit()
 
 def Arruma_bases(valor):
     valor = valor.strip()
@@ -302,7 +313,8 @@ def Define_Turno (valor):
     else:
         corpo = 'Parece que algum turno novo foi criado e não está na lista no Script do Sigmec. Nome do turno com problema: ' + str(valor)
         Send_email.send_email(corpo)
-        raise IndexError (corpo)
+        print(corpo)
+        sys.exit()
     
 #Padroniza os nomes das aeronaves
 def Padroniza_aeronaves(df):
@@ -354,6 +366,8 @@ def Define_Quinzena(valor):
     else:
         corpo = 'Parece que alguma nomenclatura nova foi criada para quinzena e não está na lista. Nome com problema: ' + valor
         Send_email.send_email(corpo)
+        sys.exit()
+        
 
 def Extrai_Mes_atual():
     lista_mes_atual = Cria_Lista_De_Pesquisa()[0]
@@ -404,9 +418,9 @@ def Extrai_Mes_atual():
         
         return df_geral_mes_atual
     except Exception as e:
-        Send_email.send_email('Erro ao Extrair dados do mês atual do Sigmec')
+        Send_email.send_email(f'Erro ao Extrair dados do mês atual do Sigmec \n ERROR: {e}')
         print('Erro ao Extrair dados do mês atual do Sigmec\n Error: ',e)
-        raise e
+        sys.exit()
 
 
 def Extrai_Mes_seguinte():
@@ -439,7 +453,7 @@ def Extrai_Mes_seguinte():
             #Junta a planilha parcial, com info da base, na planilha geral de todas as bases
             df_geral_mes_seguinte = pd.concat([df_geral_mes_seguinte,df_mes_seguinte], ignore_index=True)
     except Exception as e:
-        Send_email.send_email('Erro ao Extrair dados do mês atual do Sigmec \n ERROR: ', e)
+        Send_email.send_email(f'Erro ao Extrair dados do mês atual do Sigmec \n ERROR: {e}')
         print('Erro ao Extrair dados do mês seguinte do Sigmec')
         raise e
     print('Manipulando dados da planilha do mês seguinte...')
@@ -463,6 +477,5 @@ def Extrai_Mes_seguinte():
         #Adiciona o dia 31 com todas linhas em branco caso ele não exista no mês em quetão, pois o BI precisa de uma coluna chamada 31
         df_geral_mes_seguinte = Padroniza_dia_31(df_geral_mes_seguinte)
     except Exception as e:
-        Send_email.send_email('Erro ao Extrair dados do mês atual do Sigmec \n ERROR: ', e)
         print('Não existem dados de escala para o mês seguinte')
     return df_geral_mes_seguinte
